@@ -1,19 +1,21 @@
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Nerdery - XBox 360 Games</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="request.js" type="text/javascript"></script>
 </head>
 <body>
     <div class="header centered">
-        <img src="logo.png" border="0">
-        <div>
-            <span class="title">XBox 360 Games</span>
-            <a href="javascript:loadTab('wanted')">wanted</a> |
-            <a href="javascript:loadTab('gotten')">gotten</a> |
-            <a href="javascript:loadTab('submit')">submit</a>
+        <img src="logo.png" alt="N">
+        <div class="title">XBox 360 Games</div>
+        <img src="loading.gif" id="ajax_loading" alt="loading...">
+        <div class="links">
+            <a id="link_wanted" href="javascript:loadTab('wanted')">wanted</a> |
+            <a id="link_gotten" href="javascript:loadTab('gotten')">what we've got</a> |
+            <a id="link_submit" href="javascript:loadTab('submit')">submit</a>
         </div>
-        <img src="loading.gif" border="0" id="pageload">
     </div>
     <div class="body centered">
         <div id="render">
