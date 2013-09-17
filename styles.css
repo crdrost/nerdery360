@@ -1,0 +1,12 @@
+.centered { width: 80%; display: block; margin: 0 auto; }
+
+/* styles for the navigation bar at the top */
+.title { font-weight: bold; margin: 0 8px; }
+.header { background-color: #a9de43; height: 36px; padding: 0;}
+.header div, .header img { float: left; }
+.header img { margin: 2px; width: 32px; height: 32px }
+.header div { margin: 10px 0 0 0; }
+.header a { color: black; text-decoration: none; }
+#pageload { display: none; float: right; margin:12px; width: 43px; height: 11px; }
+.body { background-color: #eee; clear: both; padding: 5px 0;}
+#render { margin: 0 10px; }
