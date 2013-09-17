@@ -1,7 +1,6 @@
 #360 Tracker
-
 This application is a part of a code challenge submitted to the Nerdery.
-----=----+----=----+----=----+----=----+----=----+----=----+----=----+----=----+
+
 This is a front-end for an application which displays Xbox 360 games which we 
 currently own, as well as the games we would like to buy, and the number of 
 votes for buying each of those games. Employees can vote for their favorite
