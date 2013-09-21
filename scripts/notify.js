@@ -3,8 +3,7 @@
  * used to report errors or connectivity problems.
  */
 
-/*jslint browser: true */
-
+/*global $ */
 
 var notify = (function () {
     "use strict";
