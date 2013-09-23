@@ -5,16 +5,31 @@
  */
 
 /*jslint browser: true */
-/*global notify, request */
+/*global notify, request, History, JSON */
 
-function loadTab(id) {
+// This is a hash tracking thread; it supports IE7 which has no hashchange
+// event, so that back and forward buttons work with the application directly.
+(function (onhashchange, runAtStart) {
+    "use strict"
+    var hash = runAtStart ? "_" : window.location.hash;
+    setTimeout(function hashChangeTracker() {
+        if (window.location.hash !== hash) {
+            hash = window.location.hash;
+            onhashchange();
+        }
+        setTimeout(hashChangeTracker, 100);
+    }, 100);
+}(function onhashchange() { // the actual event handler used above
     "use strict";
-    if ($("#" + id).hasClass("pane")) {
+    var hash = location.hash || "#wantit";
+    if ($(hash).hasClass("pane")) {
         $(".pane").addClass("hide");
-        $("#" + id).removeClass("hide");
-        window.location = "#" + id;
+        $(hash).removeClass("hide");
+        $(".header .links a").removeClass("active");
+        $(hash + "_link").addClass("active");
     }
-}
+}, true));
+
 (function () { // reload this tab from the anchor in the URL.
     "use strict";
     var anchor = window.location.href.match(/#[a-z]+/i);
