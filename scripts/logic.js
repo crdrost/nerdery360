@@ -9,26 +9,21 @@
 
 // This is a hash tracking thread; it supports IE7 which has no hashchange
 // event, so that back and forward buttons work with the application directly.
-(function (onhashchange, runAtStart) {
-    "use strict"
-    var hash = runAtStart ? "_" : window.location.hash;
-    setTimeout(function hashChangeTracker() {
+(function () {
+    "use strict";
+    var hash = "_"; // impossible value so that it always runs at start
+    setInterval(function hashTrackerThread() {
         if (window.location.hash !== hash) {
             hash = window.location.hash;
-            onhashchange();
+            if ($(hash).hasClass("pane")) {
+                $(".pane").addClass("hide");
+                $(hash).removeClass("hide");
+                $(".header .links a").removeClass("active");
+                $(hash + "_link").addClass("active");
+            }
         }
-        setTimeout(hashChangeTracker, 100);
     }, 100);
-}(function onhashchange() { // the actual event handler used above
-    "use strict";
-    var hash = location.hash || "#wantit";
-    if ($(hash).hasClass("pane")) {
-        $(".pane").addClass("hide");
-        $(hash).removeClass("hide");
-        $(".header .links a").removeClass("active");
-        $(hash + "_link").addClass("active");
-    }
-}, true));
+}());
 
 var test_data = [
     {"id": "1234","title": "Racecars","votes": "0","status": "gotit"},
