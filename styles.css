@@ -14,6 +14,11 @@ body { margin: 0; padding: 0; font-family: "Ubuntu", sans-serif; }
 .body { background-color: #eee; clear: both; padding: 5px 0;}
 .pane {  margin: 0 10px; }
 .hide, .template, .novote a.upvote { display: none; }
+a.active { text-decoration: underline; }
+
+
+h1 { font-size: 1.2em; }
+
 
 /* disable upvote buttons when the script does not think they are allowed. */
 .novote a.upvote { display: none; }
