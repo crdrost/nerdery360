@@ -30,14 +30,6 @@
     }
 }, true));
 
-(function () { // reload this tab from the anchor in the URL.
-    "use strict";
-    var anchor = window.location.href.match(/#[a-z]+/i);
-    if (anchor !== null) {
-        loadTab(anchor[0].slice(1));
-    }
-}());
-
 var test_data = [
     {"id": "1234","title": "Racecars","votes": "0","status": "gotit"},
     {"id": "123456","title": "Mega Man","votes": "0","status": "wantit"},
