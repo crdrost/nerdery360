@@ -67,13 +67,13 @@ var handle = {}, request, fakeLoad;
         fn = handle[name] = function (data) {
             delete handle[name];
             loading -= 1;
-            callback.call(params, true, data);
+            callback.call(params, null, data);
         };
         setTimeout(function () {
             if (handle[name] === fn) {
                 delete handle[name];
                 loading -= 1;
-                callback.call(params, false);
+                callback.call(params, "timed out");
             }
         }, 10 * 1000);
 

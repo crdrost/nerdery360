@@ -3,7 +3,7 @@ body { margin: 0; padding: 0; font-family: "Ubuntu", sans-serif; }
 .centered { width: 80%; display: block; margin: 0 auto; }
 
 /* styles for the navigation bar at the top */
-.title { float: left; font-weight: bold; margin: 0 8px; }
+div.title { float: left; font-weight: bold; margin: 0 8px; }
 .header { background-color: #a9de43; height: 36px; padding: 0; margin-top: 1em; }
 .header img { float: left; }
 .header .links { float: right; margin-right: -1px;}
@@ -11,16 +11,25 @@ body { margin: 0; padding: 0; font-family: "Ubuntu", sans-serif; }
 .header div { margin: 9px 5px 0 0; }
 .header a { color: black; text-decoration: none; }
 #ajax_loading { visibility: hidden; float: right; margin-top: 10px; width: 9px; height: 16px; }
-.body { background-color: #eee; clear: both; padding: 5px 0;}
+div#body { background-color: #eee; clear: both; padding: 5px 0;}
 .pane {  margin: 0 10px; }
 .hide, .template, .novote a.upvote { display: none; }
 a.active { text-decoration: underline; }
 
+span.title { font-weight: bold; }
+ol { list-style-type: none; padding: 0; }
 
 h1 { font-size: 1.2em; }
 
+/* display upvote links when the script thinks they are allowed. */
+a.upvote { display: none; }
+.vote a.upvote { display: inline; text-decoration: none; color: gray; font-size: 0.8em; margin-right: 0.3em; }
+span.votes { display: block; color: gray; font-size: 0.8em; position: relative; top: -1px; margin-bottom: 3px; margin-left: 1.2em;}
+span.votes a { color: gray; }
 
-/* disable upvote buttons when the script does not think they are allowed. */
-.novote a.upvote { display: none; }
+/* enables nice template text when lists are empty */
+.ifempty { display: none }
+.empty .ifempty { display: block}
 
-#notifications { text-align: center; position: fixed; bottom: -50px; margin: 0 auto; width: 80%; border: 3px double red; }
+
+#notifications { text-align: center; position: fixed; bottom: -50px; margin: 0 auto; width: 80%; border: 3px double red; background-color: white; }
