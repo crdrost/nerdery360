@@ -117,33 +117,37 @@ try {
 } catch (e) {
     log_debug("error loading votes from vote cache", e);
 }
-
 var errcounter = 0;
-function getGames(err, data) {
+
+function refreshGamesList(cb) {
     "use strict";
-    if (err || data === false) {
-        errcounter += 1;
-        notify("Error: couldn't connect to the Nerdery server. (tries: " + errcounter + ")");
-    } else {
-        if (errcounter !== 0) {
-            notify("Nerdery connection re-established.");
-            errcounter = 0;
+    function getGames(err, data) {
+        if (err || data === false) {
+            errcounter += 1;
+            notify("Error: couldn't connect to the Nerdery server. (tries: " + errcounter + ")");
+        } else {
+            if (errcounter !== 0) {
+                notify("Nerdery connection re-established.");
+                errcounter = 0;
+            }
+            try {
+                updateViews(data);
+            } catch (e) {
+                log_debug("error loading votes from Nerdery server", e, data);
+                notify("Nerdery sent an invalid data structure.");
+            }
         }
-        try {
-            updateViews(data);
-        } catch (e) {
-            log_debug("error loading votes from Nerdery server", e, data);
-            notify("Nerdery sent an invalid data structure.");
+        if (typeof cb === "function") {
+            cb.apply(this, arguments);
         }
     }
+    request("/getGames", {}, getGames);
 }
 
 // load games initially & regularly
-request("/getGames", {}, getGames);
-threads.getGames = setInterval(function getGamesThread() {
-    "use strict";
-    request("/getGames", {}, getGames);
-}, 5000);
+
+refreshGamesList();
+threads.getGames = setInterval(refreshGamesList, 1000);
 
 /*
 // test for presentation logic
@@ -154,9 +158,4 @@ updateViews([
     {"id": "1", "title": "Skulls of the Shogun", "votes": "3", "status": "wantit"},
     {"id": "123457", "title": "Terraria", "votes": "2", "status": "wantit"}
 ]);
-//*/
-
-
-
-/*
 */

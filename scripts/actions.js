@@ -27,7 +27,8 @@ function setLastVote(date) {
 // status after the timeout returns.
 function upvote(id) {
     "use strict";
-    var rollback;$("div#body").removeClass("vote");
+    var rollback;
+    $("div#body").removeClass("vote");
     switch (canVote()) {
         case "wrongDay":
         return notify("Sorry, you can't upvote on weekends.");
@@ -91,11 +92,26 @@ function submitTitle() {
             break;
         case "ok":
             setLastVote(yyyymmdd());
-    
             f = function addGame() {
-                request("/addGame", {title: title}, function (err, data) {
+                request("/addGame", {title: title}, function submit(err, data) {
                     if (err) {
-                        addGame(); // idempotent; so we just retry on timeout until successful.
+                        // We'll retry on timeout if a query does not show the title.
+                        refreshGamesList(function resumeSubmit(err, data) {
+                            var titles;
+                            if (err) { // retry refreshGamesList until successful, too
+                                setTimeout(function () { refreshGamesList(resumeSubmit); }, 500);
+                            } else {
+                                titles = data.filter(function (x) {
+                                    return x.title.toLowerCase() === title.toLowerCase();
+                                });
+                                if (titles.length === 0) {
+                                    addGame();
+                                } else {
+                                    notify('Success! "' + title + '" has been added.');
+                                    document.getElementById("submit_title").value = "";
+                                }
+                            }
+                        });
                     } else {
                         notify('Success! "' + title + '" has been added.');
                         document.getElementById("submit_title").value = "";
