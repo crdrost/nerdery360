@@ -26,9 +26,9 @@ var notify = (function () {
                     hide();
                 } else {
                     loadMessage();
-                    setTimeout(notificationThread, 5000);
+                    setTimeout(notificationThread, 3000);
                 }
-            }, 5000);
+            }, 3000);
         }
     };
 }());
