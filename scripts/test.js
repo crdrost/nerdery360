@@ -18,7 +18,7 @@ var request = (function () {
                 return games;
             },
             "/addVote": function (p) {
-                var g = games.filter(function (x) {
+                var g = _.filter(games, function (x) {
                     return x.status === "wantit" && x.id === p.id.toString();
                 });
                 if (g.length !== 1) {
@@ -34,7 +34,7 @@ var request = (function () {
                 games.push({id: k.toString(), title: p.title, votes: "0", status: "wantit"});
             },
             "/setGotIt": function (p) {
-                var g = games.filter(function (x) {
+                var g = _.filter(games, function (x) {
                     return x.status === "wantit" && x.id === p.id.toString();
                 });
                 if (g.length !== 1) {

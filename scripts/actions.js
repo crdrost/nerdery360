@@ -78,7 +78,7 @@ function submitTitle() {
     var existing = JSON.parse(document.getElementById("existing_titles").value),
         title = document.getElementById("submit_title").value,
         f;
-    if (existing.indexOf(title.toLowerCase()) !== -1) {
+    if (_.indexOf(existing, title.toLowerCase()) !== -1) {
         notify('Error: "' + title + '" has already been submitted!');
     } else {
         switch (canVote()) {
@@ -101,7 +101,7 @@ function submitTitle() {
                             if (err) { // retry refreshGamesList until successful, too
                                 setTimeout(function () { refreshGamesList(resumeSubmit); }, 500);
                             } else {
-                                titles = data.filter(function (x) {
+                                titles = _.filter(data, function (x) {
                                     return x.title.toLowerCase() === title.toLowerCase();
                                 });
                                 if (titles.length === 0) {

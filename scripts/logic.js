@@ -39,7 +39,7 @@ var threads = {}; // keeps track of the setIntervals that have been created
 function cookies() {
     "use strict";
     var out = {};
-    document.cookie.split(/;\s*/g).forEach(function (x) {
+    _.each(document.cookie.split(/;\s*/g), function (x) {
         var i = x.indexOf("="), key = decodeURIComponent(x.slice(0, i));
         out[key] = decodeURIComponent(x.slice(i + 1));
     });
@@ -53,7 +53,7 @@ function cookies() {
 function canVote() {
     "use strict";
     var c;
-    if ([1, 2, 3, 4, 5].indexOf(new Date().getDay()) === -1) {
+    if (_.indexOf([1, 2, 3, 4, 5], new Date().getDay()) === -1) {
         return "wrongDay";
     } else {
         c = cookies();
@@ -89,20 +89,20 @@ function updateViews(data) {
     // We do a data transform so that collected_data is a Mustache template
     // context, and so that the views are properly sorted when rendered.
     collected_data = {
-        wantit: data.filter(function (x) { return x.status === "wantit"; }).sort(function (x, y) {
+        wantit: _.filter(data, function (x) { return x.status === "wantit"; }).sort(function (x, y) {
             // descending sort by the number of votes
             return parseInt(y.votes, 10) - parseInt(x.votes, 10);
         }),
-        gotit: data.filter(function (x) { return x.status === "gotit"; }).sort(function (x, y) {
+        gotit: _.filter(data, function (x) { return x.status === "gotit"; }).sort(function (x, y) {
             // ascending sort by the title
             return x.title < y.title ? -1 : 1;
         })
     };
     // cache existing titles for the submit button's use
-    titles = data.map(function (x) { return x.title.toLowerCase(); });
+    titles = _.map(data, function (x) { return x.title.toLowerCase(); });
     $("#existing_titles").val(JSON.stringify(titles));
 
-    [$("#wantit"), $("#gotit")].forEach(function (pane) {
+    _.each([$("#wantit"), $("#gotit")], function (pane) {
         $(".render", pane).html(Mustache.render($(".template", pane).html(), collected_data));
         if (collected_data[pane.get(0).id].length === 0) {
             pane.addClass("empty");
