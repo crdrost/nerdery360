@@ -18,14 +18,14 @@ request = (function () { // scope bracket for loading, randomName.
     };
     setInterval(function checkLoading() {
         if (loadCount > 0) {
-            setTimeout(function () { 
+            setTimeout(function () {
                 loading.start();
             }, 200);
         } else {
             loading.stop();
         }
     }, 100);
-    
+
     // names on handle[] are given by this randomName picker. It needs to be an
     // ECMAScript identifier and there needs to be enough of them to not
     // generate many birthday collisions; I've assumed 52^3 is enough for this.
