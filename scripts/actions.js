@@ -54,7 +54,7 @@ function upvote(id) {
 // can confirm/deny that transaction
 function confirmGotIt(id) {
     "use strict";
-    var title = $("#want_" + id + " .title").text();
+    var title = $("#wantit_" + id + " .title").text();
     $("#confirmgotit .render").html(
         Mustache.render($("#confirmgotit .template").html(), {id: id, title: title})
     );

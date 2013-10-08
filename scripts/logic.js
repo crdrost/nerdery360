@@ -101,16 +101,20 @@ function updateViews(data) {
     // cache existing titles for the submit button's use
     titles = _.map(data, function (x) { return x.title.toLowerCase(); });
     $("#existing_titles").val(JSON.stringify(titles));
-
-    _.each([$("#wantit"), $("#gotit")], function (pane) {
+    _.each(["wantit", "gotit"], function (s) {
+        var pane = document.getElementById(s);
         $(".render", pane).html(Mustache.render($(".template", pane).html(), collected_data));
-        if (collected_data[pane.get(0).id].length === 0) {
-            pane.addClass("empty");
+        _.each($(".render li", pane), function (x, n) {
+            x.id = pane.id + "_" + collected_data[pane.id][n];
+        });
+        if (collected_data[pane.id].length === 0) {
+            $(pane).addClass("empty");
         } else {
-            pane.removeClass("empty");
+            $(pane).removeClass("empty");
         }
     });
 }
+
 // load data from cache
 try {
     updateViews(JSON.parse(window.localStorage.voteCache));
@@ -133,7 +137,7 @@ function refreshGamesList(cb) {
             try {
                 updateViews(data);
             } catch (e) {
-                log_debug("error loading votes from Nerdery server", e, data);
+                log_debug("error loading votes from Nerdery server", e.message, data);
                 notify("Nerdery sent an invalid data structure.");
             }
         }
