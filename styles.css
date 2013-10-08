@@ -31,5 +31,6 @@ span.votes a { color: gray; }
 .ifempty { display: none }
 .empty .ifempty { display: block}
 
+canvas { float: right; margin-right: 8px; border: 1px solid #a9de43}
 
 #notifications { text-align: center; position: fixed; bottom: -50px; margin: 0 auto; width: 80%; border: 3px double red; background-color: white; }
