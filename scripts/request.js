@@ -5,25 +5,27 @@
  */
 
 /*jslint browser: true */
-
+/*global loading */
 var handle = {}, request, fakeLoad;
 
 
 request = (function () { // scope bracket for loading, randomName.
     "use strict";
     // number of current open requests.
-    var loading = 0;
+    var loadCount = 0;
     fakeLoad = function (x) {
-        loading += x;
+        loadCount += x;
     };
     setInterval(function checkLoading() {
-        if (loading > 0) {
-            document.getElementById("ajax_loading").style.visibility = "visible";
+        if (loadCount > 0) {
+            setTimeout(function () { 
+                loading.start();
+            }, 200);
         } else {
-            document.getElementById("ajax_loading").style.visibility = "hidden";
+            loading.stop();
         }
-    }, 250);
-
+    }, 100);
+    
     // names on handle[] are given by this randomName picker. It needs to be an
     // ECMAScript identifier and there needs to be enough of them to not
     // generate many birthday collisions; I've assumed 52^3 is enough for this.
@@ -66,13 +68,13 @@ request = (function () { // scope bracket for loading, randomName.
         }
         fn = handle[name] = function (data) {
             delete handle[name];
-            loading -= 1;
+            loadCount -= 1;
             callback.call(params, null, data);
         };
         setTimeout(function () {
             if (handle[name] === fn) {
                 delete handle[name];
-                loading -= 1;
+                loadCount -= 1;
                 callback.call(params, "timed out");
             }
         }, 10 * 1000);
@@ -81,6 +83,6 @@ request = (function () { // scope bracket for loading, randomName.
         element = document.createElement('script');
         element.setAttribute('src', url);
         document.body.appendChild(element);
-        loading += 1;
+        loadCount += 1;
     };
 }());
