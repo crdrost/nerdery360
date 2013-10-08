@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,7 +19,6 @@
     <div class="header centered">
         <img src="logo.png" alt="N">
         <div class="title">XBox 360 Games</div>
-        <img src="loading.gif" id="ajax_loading" alt="loading...">
         <div class="links">
             <a id="wantit_link" href="#wantit">want it</a> |
             <a id="gotit_link" href="#gotit">got it</a> |
@@ -38,7 +37,7 @@
                 <p class="upvote">Press the up-arrow to register your vote for the day, or click "submit" above to add a new title.</p>
                 <ol><li style="display: none" title="this LI makes the HTML validate.">
                     {{#wantit}}
-                    <li><a href="javascript:upvote({{id}})" class="upvote">&#9650;</a><span class="title">{{title}}</span><br><span class="votes">{{votes}} points | <a href="javascript:confirmGotIt({{id}})" class="gotit">got it?</a></span>
+                    <li><a href="javascript:upvote('{{id}}')" class="upvote">&#9650;</a><span class="title">{{title}}</span><br><span class="votes">{{votes}} points | <a href="javascript:confirmGotIt('{{id}}')" class="gotit">got it?</a></span>
                 {{/wantit}}</ol>
                 <p class="ifempty">This list is totally empty! You should <a href="#submit">add a game</a> of your own!</p>
             </div>

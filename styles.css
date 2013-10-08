@@ -10,7 +10,6 @@ div.title { float: left; font-weight: bold; margin: 0 8px; }
 .header img { margin: 2px; width: 32px; height: 32px }
 .header div { margin: 9px 5px 0 0; }
 .header a { color: black; text-decoration: none; }
-#ajax_loading { visibility: hidden; float: right; margin-top: 10px; width: 9px; height: 16px; }
 div#body { background-color: #eee; clear: both; padding: 5px 0;}
 .pane {  margin: 0 10px; }
 .hide, .template, .novote a.upvote { display: none; }
