@@ -3,7 +3,7 @@
  * used to report errors or connectivity problems.
  */
 
-/*global $ */
+/*global $, setTimeout */
 
 var notify = (function () {
     "use strict";

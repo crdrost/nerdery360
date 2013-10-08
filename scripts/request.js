@@ -23,7 +23,7 @@ var handle = {}, request, fakeLoad;
             document.getElementById("ajax_loading").style.visibility = "hidden";
         }
     }, 250);
-    
+
     // names on handle[] are given by this randomName picker. It needs to be an
     // ECMAScript identifier and there needs to be enough of them to not
     // generate many birthday collisions; I've assumed 52^3 is enough for this.

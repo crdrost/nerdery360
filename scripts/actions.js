@@ -2,24 +2,8 @@
  * index.html.
  */
 
-// Returns the current date as a string in yyyy-mm-dd format in the date's local
-// time zone, so that string comparison of dates can be used.
-function yyyymmdd(d) {
-    "use strict";
-    d = d || new Date();
-    function pad2(x) {
-        return ("00" + x).slice(-2);
-    }
-    return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
-}
-
-// sets the lastVote cookie to the date (string, yyyy-mm-dd format so that the
-// string < comparison can be used to compare the dates).
-function setLastVote(date) {
-    "use strict";
-    var t = new Date().getTime() + 2 * 24 * 60 * 60 * 1000; // 2 days in the future
-    document.cookie = "lastVote=" + date + "; expires=" + new Date(t).toUTCString();
-}
+/*jslint browser: true, nomen: true */
+/*global _, $, vote, notify, request, Mustache, refreshGamesList */
 
 // called by the upvoting arrows. The underlying database operation is not
 // idempotent: retrying an upvote which appeared to be timing out would game the
@@ -29,25 +13,25 @@ function upvote(id) {
     "use strict";
     var rollback;
     $("div#body").removeClass("vote");
-    switch (canVote()) {
-        case "wrongDay":
+    switch (vote.allowed()) {
+    case "wrongDay":
         return notify("Sorry, you can't upvote on weekends.");
-        case "alreadyVoted":
+    case "alreadyVoted":
         return notify("Sorry, you already voted today.");
-        case "ok":
-            rollback = cookies().lastVote;
-            setLastVote(yyyymmdd());
-            request("/addVote", {id: id}, function (err, data) {
-                if (err || data === false) {
-                    // rollback vote status on an error
-                    notify(data === false ? "App error: invalid ID used to add vote." :
-                            "Upvote request timed out; assuming it was unsuccessful.");
-                    setLastVote(rollback);
-                    $("div#body").addClass("vote");
-                } else {
-                    notify("Your vote has been recorded.");
-                }
-            });
+    case "ok":
+        rollback = vote.getLast();
+        vote.setLast();
+        return request("/addVote", {id: id}, function (err, data) {
+            if (err || data === false) {
+                // rollback vote status on an error
+                notify(data === false ? "App error: invalid ID used to add vote." :
+                        "Upvote request timed out; assuming it was unsuccessful.");
+                vote.setLast(rollback);
+                $("div#body").addClass("vote");
+            } else {
+                notify("Your vote has been recorded.");
+            }
+        });
     }
 }
 // called by the "got it?" link on each entry, opens a confirmation tab which
@@ -63,10 +47,10 @@ function confirmGotIt(id) {
 // called by the confirmation tab triggered by confirmGotIt()
 function gotIt(id) {
     "use strict";
-    request("/setGotIt", {id: id}, function (err, data) {
+    request("/setGotIt", {id: id}, function (err) {
         if (err) {
             gotIt(id); // idempotent; so we just retry on timeout until successful.
-        } else  {
+        } else {
             notify("Game confirmed -- we got it!");
         }
     });
@@ -75,13 +59,14 @@ function gotIt(id) {
 
 // called by the title submission form to send a title for consideration.
 function submitTitle() {
+    "use strict";
     var existing = JSON.parse(document.getElementById("existing_titles").value),
         title = document.getElementById("submit_title").value,
         f;
     if (_.indexOf(existing, title.toLowerCase()) !== -1) {
         notify('Error: "' + title + '" has already been submitted!');
     } else {
-        switch (canVote()) {
+        switch (vote.allowed()) {
         case "alreadyVoted":
             notify("Sorry, you've already voted today!");
             window.location = "#wantit";
@@ -91,9 +76,9 @@ function submitTitle() {
             window.location = "#wantit";
             break;
         case "ok":
-            setLastVote(yyyymmdd());
+            vote.setLast();
             f = function addGame() {
-                request("/addGame", {title: title}, function submit(err, data) {
+                request("/addGame", {title: title}, function submit(err) {
                     if (err) {
                         // We'll retry on timeout if a query does not show the title.
                         refreshGamesList(function resumeSubmit(err, data) {
@@ -120,7 +105,8 @@ function submitTitle() {
             };
             notify('Submitting "' + title + '"...');
             f();
-            window.location = "#wantit"
+            window.location = "#wantit";
+            break;
         }
     }
 }

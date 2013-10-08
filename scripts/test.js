@@ -1,7 +1,11 @@
 /* test.js
  * This file replaces request.js to provide a realistic offline environment 
- * where the system can be tested.
+ * where the system can be tested. Some requests timeout, and may or may not
+ * perform the requested service when they do.
  */
+
+/*jslint browser: true, nomen: true */
+/*global _ */
 
 var request = (function () {
     "use strict";
@@ -11,10 +15,10 @@ var request = (function () {
     }
     var games = [], id = 0,
         services = {
-            "/checkKey": function (p) {
+            "/checkKey": function () {
                 return true;
             },
-            "/getGames": function (p) {
+            "/getGames": function () {
                 return games;
             },
             "/addVote": function (p) {
@@ -23,10 +27,9 @@ var request = (function () {
                 });
                 if (g.length !== 1) {
                     return false;
-                } else {
-                    g[0].votes = (parseInt(g[0].votes, 10) + 1).toString();
-                    return true;
                 }
+                g[0].votes = (parseInt(g[0].votes, 10) + 1).toString();
+                return true;
             },
             "/addGame": function (p) {
                 var k = id;
@@ -39,12 +42,11 @@ var request = (function () {
                 });
                 if (g.length !== 1) {
                     return false;
-                } else {
-                    g[0].status = "gotit";
-                    return true;
                 }
+                g[0].status = "gotit";
+                return true;
             },
-            "/clearGames": function (p) {
+            "/clearGames": function () {
                 games = [];
                 return true;
             }
@@ -53,7 +55,7 @@ var request = (function () {
         // 0 = outgoing trip, 1 = incoming trip
         var t0 = randTime(), t1 = randTime(),
             fail0 = Math.random() < 0.002, fail1 = Math.random() < 0.002;
-        
+
         if (fail0) {
             // outgoing request was not received: no effect, response times out.
             setTimeout(function () {
