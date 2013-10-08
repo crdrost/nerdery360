@@ -7,9 +7,10 @@
 /*jslint browser: true, nomen: true */
 /*global _, $, console, Mustache, notify, request, JSON */
 
-var threads, vote, errcounter;
+var threads, vote, errcounter, titleMap;
 errcounter = 0; // counts number of failed connections to the nerdery servers.
 threads = {};   // keeps track of the setIntervals that are created in this file.
+titleMap = {};  // keeps track of titles assigned to various IDs.
 
 /** Namespace `vote` 
  *  This object handles the persistence of a date which records when we last voted. It
@@ -32,7 +33,10 @@ vote = (function () {
     // Prepend "0" to x until x.length is n.
     function pad(x, n) {
         x = x.toString();
-        return x.length < n ? x : pad("0" + x, n);
+        while (x.length < n) {
+            x = "0" + x;
+        }
+        return x;
     }
     // This method formats a date into a string in YYYY-MM-DD format.
     function yyyymmdd(d) {
@@ -40,7 +44,7 @@ vote = (function () {
     }
     return {
         allowed: function allowed() {
-            if (_.indexOf([1, 2, 3, 4, 5], new Date().getDay()) !== -1) {
+            if (_.indexOf([1, 2, 3, 4, 5], new Date().getDay()) === -1) {
                 return "wrongDay";
             }
             return vote.getLast() < vote.getToday() ? "ok" : "alreadyVoted";
@@ -52,6 +56,9 @@ vote = (function () {
                 cookies[key] = decodeURIComponent(x.slice(i + 1));
             });
             return cookies.lastVote || "";
+        },
+        getToday: function getToday() {
+            return yyyymmdd(new Date());
         },
         setLast: function setLast(date) {
             date = typeof date === "string" ? date : yyyymmdd(date || new Date());
@@ -82,7 +89,10 @@ function updateViews(data) {
     } catch (e) {
         log_debug("error updating localStorage", e);
     }
-
+    // add titles to the titleMap.
+    _.each(data, function (x) {
+        titleMap[x.id] = x.title;
+    });
     // We do a data transform so that collected_data is a Mustache template
     // context, and so that the views are properly sorted when rendered.
     collected_data = {
@@ -101,9 +111,6 @@ function updateViews(data) {
     _.each(["wantit", "gotit"], function (s) {
         var pane = document.getElementById(s);
         $(".render", pane).html(Mustache.render($(".template", pane).html(), collected_data));
-        _.each($(".render li", pane), function (x, n) {
-            x.id = pane.id + "_" + collected_data[pane.id][n];
-        });
         if (collected_data[pane.id].length === 0) {
             $(pane).addClass("empty");
         } else {

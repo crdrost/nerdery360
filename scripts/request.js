@@ -9,7 +9,7 @@
 var handle = {}, request, fakeLoad;
 
 
-(function () { // scope bracket for loading, randomName.
+request = (function () { // scope bracket for loading, randomName.
     "use strict";
     // number of current open requests.
     var loading = 0;
@@ -31,7 +31,7 @@ var handle = {}, request, fakeLoad;
         var i, s = "",
             alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (i = 0; i < 6; i += 1) {
-            s += alphabet[Math.floor(Math.random() * alphabet.length)];
+            s += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
         }
         return s;
     }
@@ -48,7 +48,7 @@ var handle = {}, request, fakeLoad;
      *    Challenge document; the endpoints from there are used literally.
      */
 
-    request = function request(endpoint, params, callback) {
+    return function (endpoint, params, callback) {
         var key, name = randomName(), paramStrs = [], url, fn, element;
         // format the object into a URL string
         params.apiKey = '2d66904252fefc15b8a83a19a3ef37d7';

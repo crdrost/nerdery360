@@ -3,7 +3,7 @@
  */
 
 /*jslint browser: true, nomen: true */
-/*global _, $, vote, notify, request, Mustache, refreshGamesList */
+/*global _, $, vote, notify, request, Mustache, refreshGamesList, titleMap */
 
 // called by the upvoting arrows. The underlying database operation is not
 // idempotent: retrying an upvote which appeared to be timing out would game the
@@ -38,9 +38,8 @@ function upvote(id) {
 // can confirm/deny that transaction
 function confirmGotIt(id) {
     "use strict";
-    var title = $("#wantit_" + id + " .title").text();
     $("#confirmgotit .render").html(
-        Mustache.render($("#confirmgotit .template").html(), {id: id, title: title})
+        Mustache.render($("#confirmgotit .template").html(), {id: id, title: titleMap[id]})
     );
     window.location = "#confirmgotit";
 }

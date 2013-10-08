@@ -34,7 +34,7 @@ var request = (function () {
             "/addGame": function (p) {
                 var k = id;
                 id += 1;
-                games.push({id: k.toString(), title: p.title, votes: "0", status: "wantit"});
+                games.push({id: k.toString(), title: p.title, votes: "1", status: "wantit"});
             },
             "/setGotIt": function (p) {
                 var g = _.filter(games, function (x) {
