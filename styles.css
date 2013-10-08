@@ -6,7 +6,7 @@ body { margin: 0; padding: 0; font-family: "Ubuntu", sans-serif; }
 div.title { float: left; font-weight: bold; margin: 0 8px; }
 .header { background-color: #a9de43; height: 36px; padding: 0; margin-top: 1em; }
 .header img { float: left; }
-.header .links { float: right; margin-right: -1px;}
+.header .links { float: right; }
 .header img { margin: 2px; width: 32px; height: 32px }
 .header div { margin: 9px 5px 0 0; }
 .header a { color: black; text-decoration: none; }
